@@ -55,10 +55,8 @@ public class UngimpWebtop extends AsyncTask<Boolean, Integer, Boolean>
 		this.AlertMessage = "No active network connection detected. Please enable 3G or WiFi!";
 		publishProgress(-1);
 
-		if (!WebtopEnabler.NETWORK_ACTIVE) {
-			if (!Activity.verifyConnectivity()) {
-				return false;
-			}
+		if (!Activity.verifyConnectivity()) {
+			return false;
 		}
 
 		if (!isAlreadyModded(busybox)) {

@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.Date;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -35,7 +36,7 @@ public class WebtopEnabler extends Activity {
 
 	private String Path = null;
 
-	static boolean NETWORK_ACTIVE = false;
+	static String ROM_VERSION = null;
 
 	static final String mountosh_md5 = "12deaf61043441bd9656b1d47d5ded61";
 	static final String aptsourcesnew_md5 = "27354e668917d7378eb178ae3d5eca62";
@@ -51,24 +52,49 @@ public class WebtopEnabler extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		logHelper(LOGTAG, "\n\n\nStarting WebtopEnabler: "
+		String VersionString = android.os.Build.ID;
+
+		if (!VersionString.contains("OLYFR_U4_1.5.7")) {
+			logHelper(LOGTAG, "***Motorola ROM 1.5.7 not detected ["
+					+ VersionString + "] ***");
+			new DialogHelper(this)
+					.showActionConfirmation(
+							"Version Alert",
+							"You do no appear to be running ROM 1.5.7; you may experience problems! If you should have issues, uninsalling the modification via the menu option in this application should resolve your issue.\n\nAre you sure you want to continue?",
+							"Yes", "No", null,
+							new DialogInterface.OnClickListener() {
+
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									finish();
+
+								}
+							});
+		}
+
+		if (VersionString.contains("OLYFR_U4_1.5.7"))
+			WebtopEnabler.ROM_VERSION = "1.5.7";
+
+		if (VersionString.contains("OLYFR_U4_1.8.3"))
+			WebtopEnabler.ROM_VERSION = "1.8.3";
+
+		logHelper(LOGTAG, "\n\n\nStarting WebtopEnabler (ROM "
+				+ VersionString
+				+ "): "
 				+ (DateFormat.format("EEEE, MMMM d, yyyy hh:mmaa ", new Date()
 						.getTime())).toString());
 
 		AssetsHelper.unzipAssets(this.getApplicationContext());
-
-		verifyConnectivity();
 
 		this.Path = String.valueOf(this.getApplicationContext().getFilesDir()
 				.getAbsolutePath());
 
 		Button mod_webtop_button = (Button) this
 				.findViewById(R.id.button_webtop_mod);
-
 		Button reboot_button = (Button) this.findViewById(R.id.button_reboot);
 
 		mod_webtop_button.setOnClickListener(new ModWebtopButtonListener());
-
 		reboot_button.setOnClickListener(new RebootButtonListener());
 	}
 
@@ -80,9 +106,7 @@ public class WebtopEnabler extends Activity {
 	 */
 
 	public boolean verifyConnectivity() {
-
 		ConnectivityManager connec = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
-
 		if (connec.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED
 				|| connec.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
 						.getState() == NetworkInfo.State.CONNECTED) {
@@ -99,38 +123,34 @@ public class WebtopEnabler extends Activity {
 
 				if (urlc.getResponseCode() == 200) {
 
-					NETWORK_ACTIVE = true;
 					logHelper(LOGTAG,
-							"Connection to http://ports.ubuntu.com successfull (Network Acitve: "
-									+ NETWORK_ACTIVE + ")");
+							"Connection to http://ports.ubuntu.com successfull!");
 
 				} else {
 
-					NETWORK_ACTIVE = false;
 					logHelper(LOGTAG,
-							"Connection to http://ports.ubuntu.com unsuccessfull (Network Acitve: "
-									+ NETWORK_ACTIVE + ")");
+							"Connection to http://ports.ubuntu.com unsuccessfull!");
 
 				}
 
 			} catch (MalformedURLException e) {
 
-				NETWORK_ACTIVE = false;
 				logHelper(LOGTAG, e.getMessage());
+				return false;
 
 			} catch (IOException e) {
 
-				NETWORK_ACTIVE = false;
 				logHelper(LOGTAG, e.getMessage());
+				return false;
 
 			}
 
 		} else {
 
-			NETWORK_ACTIVE = false;
+			return false;
 		}
 
-		return NETWORK_ACTIVE;
+		return true;
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -161,7 +181,18 @@ public class WebtopEnabler extends Activity {
 
 	class RebootButtonListener implements OnClickListener {
 		public void onClick(View v) {
-			new Reboot(WebtopEnabler.this, Path, "reboot").execute();
+
+			new DialogHelper(WebtopEnabler.this).showActionConfirmation(
+					"Reboot", "Are sure you want to reboot?",
+					new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							new Reboot(WebtopEnabler.this, Path, "reboot")
+									.execute();
+
+						}
+					});
 		}
 	}
 

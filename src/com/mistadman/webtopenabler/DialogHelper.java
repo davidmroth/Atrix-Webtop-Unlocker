@@ -51,8 +51,8 @@ public class DialogHelper extends Dialog {
 			this.PBAR_ISHORIZPNTAL = false;
 		}
 
-		//if (Value != -1)
-			//this.progressDialog.setProgress(Value);
+		// if (Value != -1)
+		// this.progressDialog.setProgress(Value);
 
 		if (!this.progressDialog.isShowing())
 			this.progressDialog.show();
@@ -86,8 +86,43 @@ public class DialogHelper extends Dialog {
 		this.Alertbuilder.create().show();
 	}
 
+	/**
+	 * @param Title
+	 * @param Message
+	 * @param PositiveClickListener
+	 */
 	public void showActionConfirmation(String Title, String Message,
-			DialogInterface.OnClickListener clickListener) {
+			DialogInterface.OnClickListener PositiveClickListener) {
+
+		this.showActionConfirmation(Title, Message, "Yes", "No",
+				PositiveClickListener, null);
+	}
+
+	/**
+	 * @param Title
+	 * @param Message
+	 * @param PositiveClickListener
+	 * @param NegativeClickListener
+	 */
+	public void showActionConfirmation(String Title, String Message,
+			DialogInterface.OnClickListener PositiveClickListener,
+			DialogInterface.OnClickListener NegativeClickListener) {
+		this.showActionConfirmation(Title, Message, "Yes", "No",
+				PositiveClickListener, NegativeClickListener);
+	}
+
+	/**
+	 * @param Title
+	 * @param Message
+	 * @param PositiveText
+	 * @param NegativeText
+	 * @param PositiveClickListener
+	 * @param NegativeClickListener
+	 */
+	public void showActionConfirmation(String Title, String Message,
+			String PositiveText, String NegativeText,
+			DialogInterface.OnClickListener PositiveClickListener,
+			DialogInterface.OnClickListener NegativeClickListener) {
 
 		if (this.progressDialog.isShowing())
 			this.progressDialog.dismiss();
@@ -95,13 +130,32 @@ public class DialogHelper extends Dialog {
 		this.Alertbuilder.setCancelable(false);
 		this.Alertbuilder.setTitle(Title);
 		this.Alertbuilder.setMessage(Message);
-		this.Alertbuilder.setPositiveButton("Yes", clickListener);
-		this.Alertbuilder.setNegativeButton("No",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						dialog.dismiss();
-					}
-				});
+
+		if (PositiveClickListener != null) {
+			this.Alertbuilder.setPositiveButton(PositiveText,
+					PositiveClickListener);
+		} else {
+
+			this.Alertbuilder.setPositiveButton(PositiveText,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							dialog.dismiss();
+						}
+					});
+		}
+
+		if (NegativeClickListener != null) {
+			this.Alertbuilder.setNegativeButton(NegativeText,
+					NegativeClickListener);
+		} else {
+
+			this.Alertbuilder.setNegativeButton(NegativeText,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							dialog.dismiss();
+						}
+					});
+		}
 
 		this.Alertbuilder.create().show();
 	}
