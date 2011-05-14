@@ -53,7 +53,7 @@ public class Reboot extends AsyncTask<Boolean, Integer, Boolean> {
 
 		this.Task.RunCommand(this.Cmd, false);
 		if (!this.Task.wasSuccessfull) {
-			
+
 			// TODO: Do I really need to run this command during every reboot?
 			this.Task.RunCommand(busybox + "rm -r " + Path + "/tmp", false);
 			this.AlertMessage = "There was an error rebooting the device.\n\nPlease manually reboot!";
@@ -65,9 +65,9 @@ public class Reboot extends AsyncTask<Boolean, Integer, Boolean> {
 
 	@Override
 	protected void onPostExecute(Boolean result) {
-		if (!result)
+		if (!result) // If reboot is success, no need to show an Alert dialog
 			this.Dialog.showAlert(this.AlertTitle, this.AlertMessage);
-		
+
 		this.Dialog = null;
 		this.Task = null;
 	}
