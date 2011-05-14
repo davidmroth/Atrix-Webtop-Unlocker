@@ -19,7 +19,7 @@ public class UngimpWebtop extends AsyncTask<Boolean, Integer, Boolean>
 
 	private DialogHelper Dialog;
 	private ShellHelper Task;
-	private WebtopEnabler Context;
+	private WebtopEnabler Activity;
 
 	private final int bufferSize = 1 * 1024;
 	private final String Path;
@@ -30,10 +30,10 @@ public class UngimpWebtop extends AsyncTask<Boolean, Integer, Boolean>
 
 	private int RebootType = 0;
 
-	public UngimpWebtop(WebtopEnabler Context, String Path) {
+	public UngimpWebtop(WebtopEnabler Activity, String Path) {
 		this.Path = Path;
-		this.Context = Context;
-		this.Dialog = new DialogHelper(this.Context);
+		this.Activity = Activity;
+		this.Dialog = new DialogHelper(this.Activity);
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class UngimpWebtop extends AsyncTask<Boolean, Integer, Boolean>
 		publishProgress(-1);
 
 		if (!WebtopEnabler.NETWORK_ACTIVE) {
-			if (!Context.verifyConnectivity()) {
+			if (!Activity.verifyConnectivity()) {
 				return false;
 			}
 		}
@@ -482,7 +482,7 @@ public class UngimpWebtop extends AsyncTask<Boolean, Integer, Boolean>
 		if (!this.Task.wasSuccessfull) {
 			return false;
 		}
-		
+
 		this.Task.RunCommand(busybox + "chmod 0440 /tmp/osh/etc/sudoers.new");
 		if (!this.Task.wasSuccessfull) {
 			return false;
@@ -1592,7 +1592,7 @@ public class UngimpWebtop extends AsyncTask<Boolean, Integer, Boolean>
 	protected OnClickListener Regimp() {
 		return new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
-				new RegimpWebtop(Context, Path).execute();
+				new RegimpWebtop(Activity, Path).execute();
 			}
 		};
 	}
@@ -1601,7 +1601,7 @@ public class UngimpWebtop extends AsyncTask<Boolean, Integer, Boolean>
 		return new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				String[] RebootCmd = new String[] { "sync", "sync", "reboot" };
-				new Reboot(Context, Path, RebootCmd).execute();
+				new Reboot(Activity, Path, RebootCmd).execute();
 			}
 		};
 	}

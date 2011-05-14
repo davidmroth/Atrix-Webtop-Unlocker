@@ -14,7 +14,7 @@ public class RegimpWebtop extends AsyncTask<Boolean, Integer, Boolean> {
 
 	private DialogHelper Dialog;
 	private ShellHelper Task;
-	private WebtopEnabler Context;
+	private WebtopEnabler Activity;
 
 	private final int bufferSize = 1 * 1024;
 
@@ -23,10 +23,10 @@ public class RegimpWebtop extends AsyncTask<Boolean, Integer, Boolean> {
 	private String AlertMessage;
 	private String ProgressMessage;
 
-	public RegimpWebtop(WebtopEnabler Context, String Path) {
+	public RegimpWebtop(WebtopEnabler Activity, String Path) {
 		this.Path = Path;
-		this.Context = Context;
-		this.Dialog = new DialogHelper(this.Context);
+		this.Activity = Activity;
+		this.Dialog = new DialogHelper(this.Activity);
 	}
 
 	@Override
@@ -131,7 +131,7 @@ public class RegimpWebtop extends AsyncTask<Boolean, Integer, Boolean> {
 		return new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				String[] RebootCmd = new String[] { "sync", "sync", "reboot" };
-				new Reboot(Context, Path, RebootCmd).execute();
+				new Reboot(Activity, Path, RebootCmd).execute();
 			}
 		};
 	}

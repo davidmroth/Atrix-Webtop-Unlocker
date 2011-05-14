@@ -6,7 +6,7 @@ public class Reboot extends AsyncTask<Boolean, Integer, Boolean> {
 
 	private DialogHelper Dialog;
 	private ShellHelper Task;
-	private WebtopEnabler Context;
+	private WebtopEnabler Activity;
 
 	private String Path;
 	private String[] Cmd;
@@ -15,23 +15,23 @@ public class Reboot extends AsyncTask<Boolean, Integer, Boolean> {
 	private String AlertMessage;
 	private String ProgressMessage;
 
-	public Reboot(WebtopEnabler Context, String Path, String Cmd) {
-		this(Context, Path, new String[] {Cmd});
+	public Reboot(WebtopEnabler Activity, String Path, String Cmd) {
+		this(Activity, Path, new String[] {Cmd});
 	}
 
-	public Reboot(WebtopEnabler Context, String Path, String[] Cmd) {
+	public Reboot(WebtopEnabler Activity, String Path, String[] Cmd) {
 		this.Path = Path;
-		this.Context = Context;
-		this.Dialog = new DialogHelper(this.Context);
+		this.Activity = Activity;
+		this.Dialog = new DialogHelper(this.Activity);
 
 		this.Task = new ShellHelper(true);
 		this.Cmd = Cmd;
 	}
 
-	public Reboot(WebtopEnabler Context, String Path, String Shell, String[] Cmd) {
+	public Reboot(WebtopEnabler Activity, String Path, String Shell, String[] Cmd) {
 		this.Path = Path;
-		this.Context = Context;
-		this.Dialog = new DialogHelper(this.Context);
+		this.Activity = Activity;
+		this.Dialog = new DialogHelper(this.Activity);
 
 		this.Task = new ShellHelper(Shell, true);
 		this.Cmd = Cmd;
@@ -53,6 +53,8 @@ public class Reboot extends AsyncTask<Boolean, Integer, Boolean> {
 
 		this.Task.RunCommand(this.Cmd, false);
 		if (!this.Task.wasSuccessfull) {
+			
+			// TODO: Do I really need to run this command during every reboot?
 			this.Task.RunCommand(busybox + "rm -r " + Path + "/tmp", false);
 			this.AlertMessage = "There was an error rebooting the device.\n\nPlease manually reboot!";
 			return false;
@@ -63,7 +65,7 @@ public class Reboot extends AsyncTask<Boolean, Integer, Boolean> {
 
 	@Override
 	protected void onPostExecute(Boolean result) {
-		if (result)
+		if (!result)
 			this.Dialog.showAlert(this.AlertTitle, this.AlertMessage);
 		
 		this.Dialog = null;

@@ -10,7 +10,6 @@ import java.net.URL;
 import java.util.Date;
 
 import android.app.Activity;
-import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -58,13 +57,19 @@ public class WebtopEnabler extends Activity {
 
 		AssetsHelper.unzipAssets(this.getApplicationContext());
 
+		verifyConnectivity();
+
 		this.Path = String.valueOf(this.getApplicationContext().getFilesDir()
 				.getAbsolutePath());
 
 		Button mod_webtop_button = (Button) this
 				.findViewById(R.id.button_webtop_mod);
 
+		Button reboot_button = (Button) this.findViewById(R.id.button_reboot);
+
 		mod_webtop_button.setOnClickListener(new ModWebtopButtonListener());
+
+		reboot_button.setOnClickListener(new RebootButtonListener());
 	}
 
 	// TODO: Properly handle onPause()
@@ -76,7 +81,7 @@ public class WebtopEnabler extends Activity {
 
 	public boolean verifyConnectivity() {
 
-		ConnectivityManager connec = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		ConnectivityManager connec = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
 
 		if (connec.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED
 				|| connec.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
@@ -151,6 +156,12 @@ public class WebtopEnabler extends Activity {
 
 		public void onClick(View v) {
 			new UngimpWebtop(WebtopEnabler.this, Path).execute();
+		}
+	}
+
+	class RebootButtonListener implements OnClickListener {
+		public void onClick(View v) {
+			new Reboot(WebtopEnabler.this, Path, "reboot").execute();
 		}
 	}
 

@@ -81,8 +81,8 @@ public class ShellHelper {
 			}
 
 			if (DEBUG)
-				WebtopEnabler
-						.logHelper(LOGTAG, "su installed: [" + exitValue + "]");
+				WebtopEnabler.logHelper(LOGTAG, "su installed: [" + exitValue
+						+ "]");
 
 		}
 
@@ -243,9 +243,9 @@ public class ShellHelper {
 			r = shell.runWaitFor(Command.toString(), streamStdout);
 
 		} else {
+
 			WebtopEnabler.logHelper(LOGTAG,
-					"Error, su doesn't appear to be installed (su found?: "
-							+ can_su + ")!");
+					"There was an error running the su command!");
 		}
 
 		if (r != null) {
