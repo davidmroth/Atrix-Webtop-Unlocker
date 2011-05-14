@@ -1,0 +1,5 @@
+bin/
+.classpath
+default.properties
+gen/
+.project

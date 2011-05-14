@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="fill_parent"
+	android:layout_height="fill_parent" android:orientation="vertical"
+	xmlns:android="http://schemas.android.com/apk/res/android">
+	<Button android:id="@+id/button_webtop_mod" android:text="@string/button_webtop_mod"
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:layout_centerInParent="true" android:layout_centerHorizontal="true"
+		android:textSize="34sp" android:textStyle="bold"></Button>
+	<Button android:id="@+id/button_reboot" android:text="@string/button_reboot"
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:layout_below="@id/button_reboot" android:textSize="34sp"
+		android:textStyle="bold" android:layout_centerHorizontal="true"></Button>
+</RelativeLayout>

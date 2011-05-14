@@ -1,0 +1,9 @@
+#!/system/bin/sh
+
+# Run mountosh.orig.
+/system/bin/mountosh.orig "$@"
+
+# Then, mount the filesystem file over the existing /osh
+# partition.
+/sbin/losetup /dev/block/loop7 /data/ubuntu.disk
+/system/bin/mount -t ext3 /dev/block/loop7 /osh

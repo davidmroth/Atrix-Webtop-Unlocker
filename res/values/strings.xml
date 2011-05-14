@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Atrix Webtop Unlocker</string>
+	<string name="button_webtop_mod">Unlock Webtop</string>
+	<string name="button_reboot">Reboot</string>
+	<string name="menu_uninstall_webtop_mod">Uninstall Webtop Modifications</string>
+</resources>
